@@ -186,6 +186,7 @@ continue;
 
     for (int i=0;i<matrices.size();i++)
         matrices[i].destroy();
+	cout<<"I am Perihane";
 	system("pause");
   return 0;
 }
