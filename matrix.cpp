@@ -670,4 +670,445 @@ matrix matrix::logMatrix ()
         }
         return c ;
 }
+	void pushMat(){
+	matrix c;
+	c.create_matrix(2,2);
+	c.breakit("[2 2; 2 2]");
+	matrixName.push_back('C');
+	matrices.push_back(c);
+	}
+
+matrix ConvertToMatrix (double x){
+	matrix a;
+	a.create_matrix(1,1);
+	a.mat[0][0]=x;
+	return a;
+}
+
+double ConvertToDouble (matrix a){
+	double x=0;
+	if (a.ncolumn==1 && a.nrow==1){
+		x=a.mat[0][0];
+	}
+	return x;
+}
+
+int IsDouble (matrix a){
+	if (a.getrow()==1 && a.getcolumn()==1)
+		return 1;
+	else
+		return 0;
+
+}
+
+
+
+char stack[70];
+char stack_dot[70];
+int top = -1;
+int top_dot=-1;
+
+void push(char item) {
+   stack[++top] = item;
+}
+
+char pop() {
+   return stack[top--];
+}
+
+void push_dot(char item) {
+   stack_dot[++top_dot] = item;
+}
+
+char pop_dot() {
+   return stack_dot[top_dot--];
+}
+
+
+//returns precedence of operators
+int precedence(char symbol) {
+
+   switch(symbol) {
+      case '+':
+      case '-':
+         return 2;
+         break;
+      case '*':
+      case '/':
+
+         return 3;
+         break;
+      case '^':
+	  case '.':
+	  case 'i':
+	  case 'a':
+	  case 'c':
+	  case 'q':
+	  case 'g':
+         return 4;
+         break;
+      case '(':
+      case ')':
+      case '#':
+         return 1;
+         break;
+   }
+}
+
+//check whether the symbol is operator?
+int isOperator(char symbol) {
+
+   switch(symbol) {
+      case '+':
+      case '-':
+      case '*':
+      case '/':
+      case '^':
+      case '(':
+      case ')':
+	  case '.':
+	  case 'i':
+	  case 'a':
+	  case 'c':
+	  case 'q':
+	  case 'g':
+
+         return 1;
+      break;
+         default:
+         return 0;
+   }
+}
+
+
+double flag10 [100];
+int flagint=0;
+char postfix_dot[100];
+
+int matrixIndex;
+bool existed=0;
+bool isMatrix=0;
+//converts infix expression to postfix
+
+
+void convert(char infix[],char postfix[]) {
+
+	for (int a=0;a<100;a++)
+		flag10[a]=0;
+
+
+	isMatrix=0;
+   int i,symbol,j = 0;
+   stack[++top] = '#';
+
+   for(i = 0;i<strlen(infix);i++) {
+      symbol = infix[i];
+
+	 if ( (i==0) && (symbol>=65 && symbol<=90) ){
+		  isMatrix=1;
+		  for (int a=0;a<matrixName.size();a++){
+			  if (matrixName[a] == infix[0]){
+				  matrixIndex=a;
+			  existed=1;
+			 break;
+			  }
+			  else
+				  existed=0;
+		  }
+		  if (existed==0)
+			  matrixName.push_back(symbol);
+
+
+		  continue;
+	  }
+
+
+
+	 if ((isOperator(symbol)==0) && ( !isdigit(symbol)) && !(symbol>=65 && symbol<=90) )
+		  continue;
+
+	  if (symbol=='.' && isOperator(infix[i+1]))
+		  continue;
+
+
+	  else if (symbol=='n' || symbol=='o' || symbol=='s' || symbol=='r' || symbol=='t' || symbol=='l' )
+		  continue;
+	  else if (symbol=='-'){
+		  if ( (j==0)|| (infix[i-1] != ' ' && !isdigit(infix[i-1]) && infix[i-1] != '.' && !(infix[i-1]>=65 && infix[i-1]<=90)) ||  (infix[i-1]==' ' && (!isdigit(infix[i-2])) && infix[i-2] != '.' && !(infix[i-1]>=65 && infix[i-1]<=90)) ){
+		  postfix[j]='0';
+		  j++;
+
+	  }
+
+	  }
+      if(isOperator(symbol) == 0) {
+         postfix[j] = symbol;
+
+		 flag10[j]=symbol;
+
+
+
+		 flagint++;
+
+		 j++;
+
+      } else {
+		  if (flagint==1)
+			  flag10[j-1]=0;
+
+		  flagint=0;
+         if(symbol == '(') {
+            push(symbol);
+			push_dot(symbol);
+         }else {
+            if(symbol == ')') {
+
+               while(stack[top] != '(') {
+
+				   postfix[j] = pop();
+				   if (pop_dot() == '.' )
+					   postfix_dot[j]='.';
+				   else
+					   postfix_dot[j]=postfix[j];
+
+
+                  j++;
+               }
+			   pop_dot();
+               pop();//pop out (.
+            } else {
+               if(precedence(symbol)>precedence(stack[top])) {
+				   if (infix[i-1]=='.')
+					   push_dot('.');
+				   else
+					   push_dot(symbol);
+                  push(symbol);
+               }else {
+
+                  while(precedence(symbol)<=precedence(stack[top])) {
+
+					   postfix[j] = pop();
+
+				   if (pop_dot() == '.' )
+					   postfix_dot[j]='.';
+				   else
+					   postfix_dot[j]=postfix[j];
+
+                     j++;
+                  }
+			   if (infix[i-1]=='.')
+					   push_dot('.');
+			   else
+				   push_dot(symbol);
+
+			   push(symbol);
+               }
+            }
+         }
+      }
+   }
+
+   while(stack[top] != '#') {
+      postfix[j] = pop();
+
+				   if (pop_dot() == '.' )
+					   postfix_dot[j]='.';
+				   else
+					   postfix_dot[j]=postfix[j];
+      j++;
+   }
+
+   postfix[j]='\0';//null terminate string.
+   postfix_dot[j]='\0';
+top = -1;
+top_dot=-1;
+flagint=0;
+
+
+
+}
+//evaluates postfix expression
+matrix evaluatePost(char *postfix){
+
+int top_matrix = -1;
+matrix stack_matrix[100];
+int currentMatrix;
+
+
+   char ch;
+   int i = 0;
+   matrix operand1,operand2;
+
+
+	   while( (ch = postfix[i]) != '\0') {
+
+
+		   if (flag10[i] !=0 && flag10[i+1] !=0 ){
+
+			   double x=(double)(((flag10[i]-'0')*10)+flag10[i+1]-'0');
+			   stack_matrix[++top_matrix] =  ConvertToMatrix(x);
+
+			   i+=2;
+			   continue;
+		   }
+
+
+		   else  if( isdigit(ch) ) {
+
+		 stack_matrix[++top_matrix] = ConvertToMatrix(ch-'0');
+
+	  }
+		   else if (ch>=65 && ch<=90){
+
+			   for (int a=0;a<matrixName.size();a++){
+				   if (matrixName[a]==ch){
+					   currentMatrix=a;
+					   break;
+				   }
+
+			   }
+			   stack_matrix[++top_matrix]= matrices[currentMatrix];
+		   }
+
+
+	  else {
+         //Operator,pop two  operands
+         operand2 = stack_matrix[top_matrix--];
+		 if (ch != 'c' && ch !='i' && ch !='a' && ch != 'g' && ch !='q')
+         operand1 = stack_matrix[top_matrix--];
+		 if ( ch=='/' && IsDouble(operand2) && ConvertToDouble(operand2)==0)
+				 throw("Infinity");
+
+
+		 switch(ch) {
+
+            case '+':
+				if (postfix_dot[i]=='.' && IsDouble(operand2)){
+
+					stack_matrix[++top_matrix]=( operand1.AdditionOfConstant(ConvertToDouble(operand2)) );
+				}
+				else{
+               stack_matrix[++top_matrix]=(operand1+operand2);
+
+				}
+               break;
+            case '-':
+			if (postfix_dot[i]=='.' && IsDouble(operand2)){
+
+					stack_matrix[++top_matrix]=( operand1.SubtractionOfConstant(ConvertToDouble(operand2)) );
+				}
+				else{
+               stack_matrix[++top_matrix]=(operand1-operand2);
+
+				}
+               break;
+            case '*':
+				if (postfix_dot[i]=='.'){
+					if (IsDouble(operand2))
+						stack_matrix[++top_matrix]=( operand1.multiplicationofconstant( ConvertToDouble(operand2) ) );
+					else if (IsDouble(operand1))
+						stack_matrix[++top_matrix]=( operand2.multiplicationofconstant( ConvertToDouble(operand1) ) );
+					else
+						stack_matrix[++top_matrix]=(operand1.ElementByElementMul(operand2) );
+
+				}
+				else
+					stack_matrix[++top_matrix]=(operand1.multiplication(operand2));
+               break;
+            case '/':
+				if (postfix_dot[i]=='.'){
+					if (IsDouble(operand2))
+						stack_matrix[++top_matrix]=( operand1.multiplicationofconstant( 1/( ConvertToDouble(operand2)) ) );
+					else if (IsDouble(operand1)){
+						if (ConvertToDouble(operand1)== 1)
+						stack_matrix[++top_matrix]=( operand2.Rdivision() );
+						else
+							stack_matrix[++top_matrix]=( operand2.Rdivision().multiplicationofconstant( ConvertToDouble(operand1) ) );
+					}
+					else
+						stack_matrix[++top_matrix]=(operand1.ElementByElementDiv(operand2) );
+
+
+				}
+				else if (IsDouble(operand2))
+					stack_matrix[++top_matrix]=(operand1.ElementByElementDiv(operand2) );
+
+				else
+					stack_matrix[++top_matrix]= operand1.division(operand2);
+               break;
+			case '^':
+
+				 if (postfix_dot[i]=='.' || IsDouble(operand1)){
+					stack_matrix[++top_matrix]=operand1.ElementByEelementPower (ConvertToDouble(operand2));
+
+				}
+				else{
+					stack_matrix[++top_matrix]=operand1.powerMatrix( ConvertToDouble(operand2) );
+
+		 }
+
+				break;
+
+			case '.':
+				if (ConvertToDouble(operand2)<10)
+				stack_matrix[++top_matrix]=ConvertToMatrix ( (ConvertToDouble(operand1) + (ConvertToDouble(operand2)/10)) );
+				else
+					stack_matrix[++top_matrix]=ConvertToMatrix ( (ConvertToDouble(operand1) + (ConvertToDouble(operand2)/100)) );
+				break;
+			case 'i':
+		            stack_matrix[++top_matrix]=operand2.sinMatrix();
+
+				break;
+			case 'a':
+					stack_matrix[++top_matrix]=operand2.tanMatrix();
+				break;
+			case'c':
+				stack_matrix[++top_matrix]=operand2.cosMatrix();
+				break;
+			case 'q':
+				stack_matrix[++top_matrix]=operand2.powerMatrix(0.5);
+				break;
+			case 'g':
+				stack_matrix[++top_matrix]=operand2.logMatrix();
+				break;
+
+
+         }
+      }
+	  i++;
+
+   }
+   if (isMatrix==1){
+   if (existed==0)
+	   matrices.push_back(stack_matrix[top_matrix]);
+   else
+	  matrices[matrixIndex]= stack_matrix[top_matrix];
+   }
+
+  // existed=0;
+   return stack_matrix[top_matrix];
+
+
+}
+
+
+
+matrix evaluateM (string infix){
+    char buffer [100];
+	strcpy(buffer,infix.c_str());
+
+
+	char postfix[100];
+	convert(buffer,postfix);
+
+	return evaluatePost(postfix);
+}
+
+double evaluateD (string infix){
+	char buffer [100];
+	strcpy(buffer,infix.c_str());
+
+	return ConvertToDouble(evaluateM(buffer));
+}
+
 
