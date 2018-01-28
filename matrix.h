@@ -62,7 +62,20 @@ class matrix
 	matrix logMatrix ();
 	
 };
+int IsDouble (matrix a);
+void push(char item);
+char pop();
+int precedence(char symbol);
+int isOperator(char symbol);
+void convert(char infix[],char postfix[]);
+matrix evaluatePost(char *postfix);
+double evaluateD (string  infix );
+matrix evaluateM (string infix);
+void pushMat();
 
+
+void parseandprint(string input );
 
 
 #endif
+
