@@ -1110,6 +1110,115 @@ double evaluateD (string infix){
 
 	return ConvertToDouble(evaluateM(buffer));
 }
+void parseandprint( string input)
+{
+    static int counter =0 ;
+    bool ola =0 ;
+ bool newmatrix=1 ;
+ matrix a ;
+int parameter1 , parameter2 ;
+ if ( input.find("[")!=-1)
+ {
+
+     a.Build_matrix(input);
+    // cout<<a.getstring()<<endl;
+ }
+ else if ( input.find("rand")!=-1){
+        for(int h=0; h<input.length();h++)
+     {
+         if(input[h]==' ')
+            input.erase(h,1);
+     }
+        parameter1=atoi(input.substr(input.find("(")+1,input.find(",")-input.find("(")-1).c_str());
+        parameter2=atoi(input.substr(input.find(",")+1,input.find(")")-input.find(",")-1).c_str());
+       a.random(parameter1,parameter2);
+
+ }
+ else if ( input.find("eye")!=-1){
+          for(int h=0; h<input.length();h++)
+     {
+         if(input[h]==' ')
+            input.erase(h,1);
+     }
+
+         parameter1=atoi(input.substr(input.find("(")+1,input.find(",")-input.find("(")-1).c_str());
+        parameter2=atoi(input.substr(input.find(",")+1,input.find(")")-input.find(",")-1).c_str());
+        a.eye(parameter1,parameter2);
+
+ }
+ else if ( input.find("ones")!=-1){
+          for(int h=0; h<input.length();h++)
+     {
+         if(input[h]==' ')
+            input.erase(h,1);
+     }
+
+         parameter1=atoi(input.substr(input.find("(")+1,input.find(",")-input.find("(")-1).c_str());
+        parameter2=atoi(input.substr(input.find(",")+1,input.find(")")-input.find(",")-1).c_str());
+        a.ones(parameter1,parameter2);
+
+ }
+ else if ( input.find("zeros")!=-1){
+          for(int h=0; h<input.length();h++)
+     {
+         if(input[h]==' ')
+            input.erase(h,1);
+     }
+
+         parameter1=atoi(input.substr(input.find("(")+1,input.find(",")-input.find("(")-1).c_str());
+        parameter2=atoi(input.substr(input.find(",")+1,input.find(")")-input.find(",")-1).c_str());
+        a.zeros(parameter1,parameter2);
+
+ }
+ else if ( input.length () ==1 )
+ {
+     for ( int i =0 ; i <matrixName.size(); i++ )
+{
+    if ( matrixName[i]==input[0])
+    {
+        a=matrices[i];
+    }
+}
+
+ }
+ else
+ {
+
+     a = evaluateM(input);
+     ola = 1 ;
+ }
+//cout<<endl<<input<<endl;
+if ( ola==0 ){
+for ( int i =0 ; i <matrixName.size(); i++ )
+{
+    if ( matrixName[i]==input[0])
+    {
+
+        matrices[i]=a;
+         newmatrix=0 ;
+
+    }
+}
+if(newmatrix){
+matrixName.push_back(input[0]);
+matrices.push_back(a);
+}
+}
+//cout<<counter<<endl;
+if(input[input.length()-1]!=';')
+{
+    if ( flag1 ==0 ){
+    cout<<input[0]<<" = ";
+
+    a.print() ;
+
+    }
+
+}
+
+
+counter ++ ;
+}
 
 
 
