@@ -38,6 +38,11 @@ class matrix
     matrix multiplication (matrix b );
     matrix division (matrix b );
     matrix Rdivision ();
+	void random(int r, int c);
+    void eye(int r, int c);
+    void zeros(int r, int c);
+    void ones(int r, int c);
+	
 };
 
 
