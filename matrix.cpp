@@ -521,4 +521,153 @@ matrix matrix::Rdivision()
       }
 
 
+matrix matrix:: ElementByElementMul (matrix b){
+	flag1 =0 ;
+    if(this->nrow != b.nrow || this->ncolumn != b.ncolumn){
+            cout<<"Invalid matrix dimension "<<endl;
+			flag1=1;
+        }
+
+        else
+        {
+            matrix c;
+            c.create_matrix(b.nrow,b.ncolumn);
+        for(int iR=0;iR<b.nrow;iR++)
+            for(int iC=0;iC<b.ncolumn;iC++)
+                c.mat[iR][iC]= (this->mat[iR][iC] * b.mat[iR][iC]);
+        return c;
+        }
+}
+matrix matrix::AdditionOfConstant(double k)
+{
+    matrix c ;
+        c.create_matrix(this->nrow, this->ncolumn) ;
+        for ( int i = 0 ; i <this->nrow ; i ++ )
+        {
+            for ( int j =0 ; j <this -> ncolumn ; j ++ ) {
+				c.mat[i][j] =  this->mat[i][j] +k;
+            }
+        }
+        return c ;
+}
+
+matrix matrix::SubtractionOfConstant (double k) {
+	 matrix c ;
+        c.create_matrix(this->nrow, this->ncolumn) ;
+        for ( int i = 0 ; i <this->nrow ; i ++ )
+        {
+            for ( int j =0 ; j <this -> ncolumn ; j ++ ) {
+				c.mat[i][j] =  this->mat[i][j] - k;
+            }
+        }
+        return c ;
+}
+matrix matrix:: ElementByElementDiv (matrix b){
+	flag1 =0 ;
+    if(this->nrow != b.nrow || this->ncolumn != b.ncolumn){
+            cout<<"Invalid matrix dimension "<<endl;
+			flag1=1;
+			matrix c;
+            c.create_matrix(b.nrow,b.ncolumn);
+			return c;
+        }
+
+        else
+        {
+            matrix c;
+            c.create_matrix(b.nrow,b.ncolumn);
+        for(int iR=0;iR<b.nrow;iR++)
+            for(int iC=0;iC<b.ncolumn;iC++){
+				if(b.mat[iR][iC]==0){
+					cout<< "Invalid division"<<endl;
+					flag1=1;
+					return c;
+				}
+
+					c.mat[iR][iC]= (this->mat[iR][iC] / b.mat[iR][iC]);}
+        return c;
+        }
+}
+
+
+
+matrix matrix::ElementByEelementPower (double k)
+{
+    matrix c ;
+        c.create_matrix(this->nrow, this->ncolumn) ;
+        for ( int i = 0 ; i <this->nrow ; i ++ )
+        {
+            for ( int j =0 ; j <this -> ncolumn ; j ++ ) {
+                c.mat[i][j] = pow(( this->mat[i][j]),k);
+            }
+        }
+        return c ;
+}
+
+
+matrix matrix:: powerMatrix (double k){
+	 matrix c ;
+        c.create_matrix(this->nrow, this->ncolumn) ;
+		c=*this;
+		for ( int i = 1 ; i <k ; i ++ )
+        {
+
+                c =c.multiplication(*this) ;
+
+        }
+        return c ;
+}
+
+
+
+
+matrix matrix::sinMatrix ()
+{
+    matrix c ;
+        c.create_matrix(this->nrow, this->ncolumn) ;
+        for ( int i = 0 ; i <this->nrow ; i ++ )
+        {
+            for ( int j =0 ; j <this -> ncolumn ; j ++ ) {
+                c.mat[i][j] = sin( (this->mat[i][j])/*3.14159265/180*/);
+
+            }
+        }
+        return c ;
+}
+matrix matrix::cosMatrix ()
+{
+    matrix c ;
+        c.create_matrix(this->nrow, this->ncolumn) ;
+        for ( int i = 0 ; i <this->nrow ; i ++ )
+        {
+            for ( int j =0 ; j <this -> ncolumn ; j ++ ) {
+                c.mat[i][j] = cos( (this->mat[i][j])*3.14159265/180);
+            }
+        }
+        return c ;
+}
+matrix matrix::tanMatrix ()
+{
+    matrix c ;
+        c.create_matrix(this->nrow, this->ncolumn) ;
+        for ( int i = 0 ; i <this->nrow ; i ++ )
+        {
+            for ( int j =0 ; j <this -> ncolumn ; j ++ ) {
+                c.mat[i][j] = tan( (this->mat[i][j])*3.14159265/180);
+            }
+        }
+        return c ;
+}
+matrix matrix::logMatrix ()
+{
+    matrix c ;
+        c.create_matrix(this->nrow, this->ncolumn) ;
+        for ( int i = 0 ; i <this->nrow ; i ++ )
+        {
+            for ( int j =0 ; j <this -> ncolumn ; j ++ ) {
+                c.mat[i][j] = log10( this->mat[i][j]);
+            }
+        }
+        return c ;
+}
 
