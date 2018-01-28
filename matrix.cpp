@@ -275,45 +275,81 @@ matrix matrix::getCofactor(int r, int c)
 
 
 
+int LUPDecompose(double **A, int N, double Tol, int *P) {
 
-	double matrix :: getDeterminant(){
-		matrix c;
-		c.create_matrix(nrow,ncolumn);
-		for (int i=0;i<nrow;i++)
-			for (int j=0;j<ncolumn;j++)
-				c.mat[i][j]=mat[i][j];
-				//cout<<endl<<nrow<<endl<<ncolumn<<endl;
+    int i, j, k, imax;
+    double maxA, *ptr, absA;
 
-	if(nrow!=ncolumn)
-        cout<<"Invalid matrix dimension ";
-        else
-        {
-	if(nrow==1&&ncolumn==1)
-		return mat[0][0];
-	double value = 0, m = 1;
-	for(int i=0;i<nrow;i++){
-		for(int j=0;j<ncolumn;j++){
-			value=0;
+    for (i = 0; i <= N; i++)
+        P[i] = i; //Unit permutation matrix, P[N] initialized with N
 
-		{if(j<i){
-		    if ( c.mat[j][j]==0)
-                return 0 ;
+    for (i = 0; i < N; i++) {
+        maxA = 0.0;
+        imax = i;
 
+        for (k = i; k < N; k++)
+            if ((absA = fabs(A[k][i])) > maxA) {
+                maxA = absA;
+                imax = k;
+            }
 
-         value=c.mat[i][j]/c.mat[j][j];
-		 for(int k=0;k<ncolumn;k++){
+        if (maxA < Tol) return 0; //failure, matrix is degenerate
 
-			 c.mat[i][k]=c.mat[i][k]-(value*c.mat[j][k]);}
+        if (imax != i) {
+            //pivoting P
+            j = P[i];
+            P[i] = P[imax];
+            P[imax] = j;
+
+            //pivoting rows of A
+            ptr = A[i];
+            A[i] = A[imax];
+            A[imax] = ptr;
+
+            //counting pivots starting from N (for determinant)
+            P[N]++;
+        }
+
+        for (j = i + 1; j < N; j++) {
+            A[j][i] /= A[i][i];
+
+            for (k = i + 1; k < N; k++)
+                A[j][k] -= A[j][i] * A[i][k];
+        }
+    }
+
+    return 1;  //decomposition done
+}
+
+/* INPUT: A,P filled in LUPDecompose; N - dimension.
+ * OUTPUT: Function returns the determinant of the initial matrix
+ */
+double LUPDeterminant(double **A, int *P, int N) {
+
+    double det = A[0][0];
+
+    for (int i = 1; i < N; i++)
+        det *= A[i][i];
+
+    if ((P[N] - N) % 2 == 0)
+        return det;
+    else
+        return -det;
+}
+
+	double matrix::getDeterminant ()
+{
+	double result=0;
+	int *p = new int [nrow+1];
+		matrix copy = *this;
+		 if(LUPDecompose(copy.mat,nrow,0.001,p)){
+			 result= LUPDeterminant(copy.mat,p,nrow);
+			 return result;
 		 }
-		}
-		}
-	m=m*c.mat[i][i];
-	}
-	return m;
 
 
-	}
-	}
+}
+
 
 
 double matrix::cofactorDeterminant(int r, int c)
