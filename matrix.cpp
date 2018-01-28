@@ -96,7 +96,7 @@ void matrix:: Build_matrix(string input)
 
                 row.push_back(fillingrow);
 				column.push_back(fillingcolumn);
-                cout<<element<<endl;
+                //cout<<element<<endl;
                // cout<<fillingrow<<"	  "<<fillingcolumn<<endl;
                myelements.push_back(evaluateD(element));
 
@@ -176,7 +176,7 @@ void matrix:: Build_matrix(string input)
                 row.push_back(fillingrow);
 				column.push_back(fillingcolumn);
 				//cout<<fillingrow<<"	  "<<fillingcolumn<<endl;
-				cout<<element<<endl;
+				//cout<<element<<endl;
 
 
 				myelements.push_back(evaluateD(element));
@@ -235,7 +235,7 @@ void matrix:: Build_matrix(string input)
 				column.push_back(fillingcolumn);
 				//  cout<<atof(element.c_str())<<endl;
 				//  cout<<fillingrow<<"	  "<<fillingcolumn<<endl;
-				cout<<element<<endl;
+				//cout<<element<<endl;
 				myelements.push_back(evaluateD(element));
 
 				//myelements.push_back(atof(element.c_str()));
