@@ -334,21 +334,32 @@ matrix matrix::operator-(matrix &b)
 
 void matrix::print()
 {
-    cout<<'[';
+
+    //cout<<'[';
+    printf("\n");
         for(int ir=0;ir<nrow;ir++){
             for(int ic=0;ic<ncolumn;ic++){
+            if (ic==0)
+                printf("     ");
+            printf("%g",mat[ir][ic]);
 
-            cout<< this ->mat [ir][ic];
+            //cout<< this ->mat [ir][ic];
             if(ic!=ncolumn-1)
-            cout<<' ';
+                printf("     ");
+
+            //cout<<' ';
             }
 
             if(ir!=nrow-1)
-            cout<<"; ";
+             printf("\n");
+
+            //cout<<"; ";
 
         }
-    cout<<']'<<endl;
+        printf("\n");
+    //cout<<']'<<endl;
 }
+
 
 matrix matrix::getCofactor(int r, int c)
 {
