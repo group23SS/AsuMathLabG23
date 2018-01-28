@@ -12,6 +12,94 @@ vector<matrix> matrices;
 
 ///Salma's----->string matrix::getstring()
 //build_matrix 
+void matrix:: Build_matrix(string input)
+{
+	int counter=0,insidebracket=0 , sizecolumn=1 ,fillingcolumn=0 ,sizerow=1,fillingrow=0,saverow=0,savecolumn=0,aftercomma=0,semicoloncounter=0;
+     matrix put_element_into_matrix;
+     bool numeric =0 ;
+
+	vector <int>row;
+	vector <int>column;
+	vector<double>myelements;
+	string s=input.substr(input.find('[')+1),element;
+     for(int i=0;i<matrices.size();i++)
+     {
+         int pos=s.find(matrixName[i]);
+         if(pos!=-1)
+         {
+
+            s.replace(pos,1,matrices[i].getstring());
+           // cout<<endl<<input<<endl;
+         }
+
+     }
+     //cout<<s<<endl;
+
+     //string s=input.substr(input.find('[')+1),element;
+     //s=input.substr(input.find('[')+1),element;
+     int length=s.length();
+
+     for(int h=0; h<s.length();h++)
+     {
+         if(s[h]==';' && s[h+1]==' ')
+            s.erase(h+1,1);
+     }
+      for(int h=0; h<s.length();h++)
+     {
+         if(s[h]==',' && s[h+1]==' ')
+            s.erase(h+1,1);
+     }
+     if ( s[s.length()-1]==';')
+        s.erase(s.length()-1,1);
+
+     length=s.length();
+//cout<<endl<<s<<endl;
+
+	while(counter<length)
+	{
+	    //cout<<"             "<<s[counter]<<"  "<<length<<"   "<<counter<<endl;
+	if(s[counter]==']')
+	{
+			if(numeric){
+                //matrix
+                /*if(element[0]>='A' && element[0]<='Z')
+                {
+
+                    int index;
+                    for(int i =0 ; i <= matrixName.size() ; i ++ ){
+
+                    if(element[0]==matrixName[i])
+                    index=i ;
+
+                     break;
+                    }
+
+
+                    for(int i = 0 ; i <=matrices[index].getrow() ; i ++ )
+                        for ( int j = 0 ; j <matrices[index].getcolumn () ; j ++ ){
+
+                    myelements.push_back(matrices[index].mat[i][j]);
+
+                    row.push_back(fillingrow+i);
+                    column.push_back(fillingcolumn+j);
+                        }
+                        fillingrow+=matrices[index].getrow()-1;
+                        fillingcolumn+=matrices[index].getcolumn()-1;
+
+                }*/
+
+
+                row.push_back(fillingrow);
+				column.push_back(fillingcolumn);
+                //cout<<element<<endl;
+               // cout<<fillingrow<<"	  "<<fillingcolumn<<endl;
+               myelements.push_back(evaluateD(element));
+
+				//myelements.push_back(atof(element.c_str()));
+
+
+
+
 int matrix::getrow()
 {
     return nrow;
