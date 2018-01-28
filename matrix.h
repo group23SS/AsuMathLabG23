@@ -42,6 +42,24 @@ class matrix
     void eye(int r, int c);
     void zeros(int r, int c);
     void ones(int r, int c);
+	string getstring();
+
+
+	//POSTFIX
+	friend matrix ConvertToMatrix (double x);
+	friend double ConvertToDouble(matrix a);
+
+	//Trigonometric
+	matrix  ElementByElementMul (matrix b);
+	matrix AdditionOfConstant (double k) ;
+	matrix SubtractionOfConstant (double k);
+	matrix ElementByElementDiv (matrix b);
+	matrix ElementByEelementPower (double k);
+	matrix powerMatrix (double k);
+	matrix sinMatrix ();
+	matrix cosMatrix ();
+	matrix tanMatrix ();
+	matrix logMatrix ();
 	
 };
 
