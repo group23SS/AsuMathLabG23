@@ -96,6 +96,95 @@ void matrix:: Build_matrix(string input)
                myelements.push_back(evaluateD(element));
 
 				//myelements.push_back(atof(element.c_str()));
+					//myelements.push_back(atof(element.c_str()));
+
+
+
+				//	cout<<element<<endl;
+				//	cout<<sizerow<<"	  "<<sizecolumn<<endl;
+				//  cout<<fillingrow<<"	  "<<fillingcolumn<<endl;
+			//create w ektb
+		}
+		insidebracket=0;
+		counter++;
+		numeric =0;
+		element="";
+		continue;
+
+	}
+		else if(s[counter]=='[')
+	{
+		//this for the semicolon that comes after a bracket
+		//don't forget to turn it to 0
+		if(s[counter-1]!=';' && fillingrow) {
+
+				//cout<<endl<<saverow<<"           "<<savecolumn<<endl;
+		fillingrow=saverow ;
+        fillingcolumn=savecolumn+1;
+		if(saverow==0)
+		 sizecolumn++;
+		insidebracket=0;
+		aftercomma=1;
+		numeric =0;
+		element="";
+
+		}
+		insidebracket=1;
+
+		counter++;
+		continue;
+
+	}
+	else if ( s[counter]==' ')
+	{
+		if(numeric){
+               /* if(element[0]>='A' && element[0]<='Z')
+                {
+
+                    int index;
+                    f
+                    or(int i =0 ; i <= matrixName.size() ; i ++ ){
+                    if(element[0]==matrixName[i]){
+                    index=i ;
+                    break;
+                    }
+
+
+                    }
+
+
+                    for(int i = 0 ; i <matrices[index].getrow() ; i ++ ){
+                        for ( int j = 0 ; j <matrices[index].getcolumn () ; j ++ ){
+                    myelements.push_back(matrices[index].mat[i][j]);
+
+
+                    row.push_back(fillingrow+i);
+                    column.push_back(fillingcolumn+j);
+                        }
+                    }
+                    //fillingrow+=matrices[index].getrow();
+                    fillingcolumn+=matrices[index].getcolumn();
+                    //cout<<"lll"<<fillingrow<<" "<<fillingcolumn<<endl;
+
+                }*/
+
+                 //cout<<atof(element.c_str())<<endl;
+                row.push_back(fillingrow);
+				column.push_back(fillingcolumn);
+				//cout<<fillingrow<<"	  "<<fillingcolumn<<endl;
+				cout<<element<<endl;
+
+
+				myelements.push_back(evaluateD(element));
+
+			/*row.push_back(fillingrow);
+				column.push_back(fillingcolumn);
+				myelements.push_back(atof(element.c_str()));*/
+				//cout<<element<<endl;
+				//cout<<sizerow<<"	  "<<sizecolumn<<endl;
+				//cout<<fillingrow<<"	  "<<fillingcolumn<<endl;
+			//create w ektb
+		}
 
 
 
