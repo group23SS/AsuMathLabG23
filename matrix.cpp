@@ -5,13 +5,62 @@ int flag1 =0 ;
 int flag2 ;
 vector<char> matrixName;
 vector<matrix> matrices;
-//Sama's void matrix::create_matrixandfill(int nrow,int ncolumn,vector <double> myelements, vector<int> row, vector <int> column)
+void matrix::create_matrixandfill(int nrow,int ncolumn,vector <double> myelements, vector<int> row, vector <int> column)
+{
+    flag1=0;
+    this->nrow=nrow;
+    this->ncolumn =ncolumn;
+        /*
+        A dynamic 2D array is basically an array of pointers to arrays.
+        First, we will allocate memory for an array which contains a set of pointers.
+        Next, we will allocate memory for each array which is pointed by the pointers.
+        The deallocation of memory is done in the reverse order of memory allocation.
+        */
+        this->mat = new double* [nrow];
+
+        for (int i = 0; i <nrow; i++)
+        {
+            mat[i] = new double[ncolumn];
+        }
+        if ( myelements.size() != nrow*ncolumn){
+        cout<<"invalid dimensions "<<endl;
+        flag1=1;
+        return ;
+        }
+
+        for(int i =0 ; i <myelements.size() ; i ++ ){
+               // cout<<myelements[i]<<endl;
+               // cout<<row[i]<<"      "<<column[i]<<endl;
+        mat[row[i]][column[i]]=myelements[i];
+        }
+
+}
+
+
+string matrix::getstring()
+{
+    string s="";
+    s+="[";
+    for(int i=0 ;i<nrow;i++)
+    {
+        for(int j=0;j<ncolumn;j++)
+        {
+            char buffer[50];
+            sprintf(buffer,"%g", mat[i][j]);
+            s+=buffer;
+             if(j!=ncolumn-1)
+            s+=" ";
+        }
 
 
 
+            if(i!=nrow-1)
+            s+=";";
+    }
+    s+="]";
+    return s;
+}
 
-///Salma's----->string matrix::getstring()
-//build_matrix 
 void matrix:: Build_matrix(string input)
 {
 	int counter=0,insidebracket=0 , sizecolumn=1 ,fillingcolumn=0 ,sizerow=1,fillingrow=0,saverow=0,savecolumn=0,aftercomma=0,semicoloncounter=0;
@@ -91,12 +140,11 @@ void matrix:: Build_matrix(string input)
 
                 row.push_back(fillingrow);
 				column.push_back(fillingcolumn);
-                //cout<<element<<endl;
+                cout<<element<<endl;
                // cout<<fillingrow<<"	  "<<fillingcolumn<<endl;
                myelements.push_back(evaluateD(element));
 
 				//myelements.push_back(atof(element.c_str()));
-					//myelements.push_back(atof(element.c_str()));
 
 
 
@@ -185,10 +233,123 @@ void matrix:: Build_matrix(string input)
 				//cout<<fillingrow<<"	  "<<fillingcolumn<<endl;
 			//create w ektb
 		}
+		if (s[counter-1]==']' && s[counter+1]!='[')
+		{
+		   // cout<<"hii";
+            fillingcolumn=0;
+            fillingrow++;
+            sizerow++;
+        }
+        else
+            fillingcolumn++;
+		if(fillingrow==0)
+		sizecolumn++;
+		numeric =0;
+		element="";
+	}
+		else if ( s[counter]==';')
+	{
+
+		if(numeric){
+               /* if(element[0]>='A' && element[0]<='Z')
+                {
+
+                    int index;
+                    for(int i =0 ; i <= matrixName.size() ; i ++ ){
+                    if(element[0]==matrixName[i]){
+                    index=i ;
+                    break;
+                    }
+
+                    }
+                    for(int i = 0 ; i <=matrices[index].getrow() ; i ++ )
+                        for ( int j = 0 ; j <matrices[index].getcolumn () ; j ++ ){
+                    myelements.push_back(matrices[index].mat[i][j]);
+
+                    row.push_back(fillingrow+i);
+                    column.push_back(fillingcolumn+j);
+                        }
+                        fillingrow+=matrices[index].getrow()-1;
+                        fillingcolumn+=matrices[index].getcolumn()-1;
+                }
+                else *//* numeric with or without operation */
+
+                         //cout<<"problem " <<endl;
+                row.push_back(fillingrow);
+				column.push_back(fillingcolumn);
+				//  cout<<atof(element.c_str())<<endl;
+				//  cout<<fillingrow<<"	  "<<fillingcolumn<<endl;
+				cout<<element<<endl;
+				myelements.push_back(evaluateD(element));
+
+				//myelements.push_back(atof(element.c_str()));
 
 
+			//cout<<element<<endl;
+				//cout<<sizerow<<"	  "<<sizecolumn<<endl;
+				//cout<<fillingrow<<"	  "<<fillingcolumn<<endl;
+			//create w ektb
+		}
+		if(aftercomma)
+		{
+            fillingrow++;
+
+		}
+
+		else if(insidebracket){
+                 semicoloncounter++;
+		    if(semicoloncounter==1)
+		    {
+		       saverow=fillingrow;
+		    }
+			savecolumn=fillingcolumn;
+			fillingrow++;
+			sizerow++;
+			fillingcolumn=0;
+		}
+		else{
+
+			sizerow++;
+			fillingrow++;
+			fillingcolumn=0;
+
+		}
+
+		if(fillingrow==sizerow)
+        {
+
+        //cout<<endl<<"kay"<<fillingrow<<endl<<sizerow<<endl;
+		aftercomma=0;
+	}
+		numeric =0;
+		element="";
+	}
+	/*else if ( s[counter]==',')
+	{
+		//cout<<endl<<saverow<<"           "<<savecolumn<<endl;
+		fillingrow = saverow ;
+        fillingcolumn=savecolumn+1;
+		if(saverow==0)
+		sizecolumn++;
+		insidebracket=0;
+		aftercomma=1;
+		numeric =0;
+		element="";
+	}*/
+	else {
+		element+=s[counter];
+		numeric =1 ;
+	}
 
 
+	   counter++;
+	}
+
+
+	create_matrixandfill(sizerow,sizecolumn,myelements,row,column);
+
+
+}
 int matrix::getrow()
 {
     return nrow;
@@ -424,31 +585,21 @@ matrix matrix::operator-(matrix &b)
 void matrix::print()
 {
 
-    //cout<<'[';
-    printf("\n");
+    cout<<'[';
         for(int ir=0;ir<nrow;ir++){
             for(int ic=0;ic<ncolumn;ic++){
-            if (ic==0)
-                printf("     ");
-            printf("%g",mat[ir][ic]);
 
-            //cout<< this ->mat [ir][ic];
+            cout<< this ->mat [ir][ic];
             if(ic!=ncolumn-1)
-                printf("     ");
-
-            //cout<<' ';
+            cout<<' ';
             }
 
             if(ir!=nrow-1)
-             printf("\n");
-
-            //cout<<"; ";
+            cout<<"; ";
 
         }
-        printf("\n");
-    //cout<<']'<<endl;
+    cout<<']'<<endl;
 }
-
 
 matrix matrix::getCofactor(int r, int c)
 {
@@ -471,9 +622,13 @@ matrix matrix::getCofactor(int r, int c)
 }
 
 
-
-
-
+/* INPUT: A - array of pointers to rows of a square matrix having dimension N
+ *        Tol - small tolerance number to detect failure when the matrix is near degenerate
+ * OUTPUT: Matrix A is changed, it contains both matrices L-E and U as A=(L-E)+U such that P*A=L*U.
+ *        The permutation matrix is not stored as a matrix, but in an integer vector P of size N+1
+ *        containing column indexes where the permutation matrix has "1". The last element P[N]=S+N,
+ *        where S is the number of row exchanges needed for determinant computation, det(P)=(-1)^S
+ */
 int LUPDecompose(double **A, int N, double Tol, int *P) {
 
     int i, j, k, imax;
@@ -720,6 +875,20 @@ matrix matrix::Rdivision()
       }
 
 
+
+
+/*
+***********************************************************************************************************
+***********************************************************************************************************
+******************************************* Trigonometric *************************************************
+***********************************************************************************************************
+***********************************************************************************************************
+*/
+
+
+
+
+
 matrix matrix:: ElementByElementMul (matrix b){
 	flag1 =0 ;
     if(this->nrow != b.nrow || this->ncolumn != b.ncolumn){
@@ -869,6 +1038,16 @@ matrix matrix::logMatrix ()
         }
         return c ;
 }
+
+
+/*
+***********************************************************************************************************
+***********************************************************************************************************
+************************************************* POSTFIX *************************************************
+***********************************************************************************************************
+***********************************************************************************************************
+*/
+
 	void pushMat(){
 	matrix c;
 	c.create_matrix(2,2);
@@ -1126,6 +1305,8 @@ flagint=0;
 
 
 }
+
+
 //evaluates postfix expression
 matrix evaluatePost(char *postfix){
 
@@ -1309,115 +1490,9 @@ double evaluateD (string infix){
 
 	return ConvertToDouble(evaluateM(buffer));
 }
-void parseandprint( string input)
-{
-    static int counter =0 ;
-    bool ola =0 ;
- bool newmatrix=1 ;
- matrix a ;
-int parameter1 , parameter2 ;
- if ( input.find("[")!=-1)
- {
-
-     a.Build_matrix(input);
-    // cout<<a.getstring()<<endl;
- }
- else if ( input.find("rand")!=-1){
-        for(int h=0; h<input.length();h++)
-     {
-         if(input[h]==' ')
-            input.erase(h,1);
-     }
-        parameter1=atoi(input.substr(input.find("(")+1,input.find(",")-input.find("(")-1).c_str());
-        parameter2=atoi(input.substr(input.find(",")+1,input.find(")")-input.find(",")-1).c_str());
-       a.random(parameter1,parameter2);
-
- }
- else if ( input.find("eye")!=-1){
-          for(int h=0; h<input.length();h++)
-     {
-         if(input[h]==' ')
-            input.erase(h,1);
-     }
-
-         parameter1=atoi(input.substr(input.find("(")+1,input.find(",")-input.find("(")-1).c_str());
-        parameter2=atoi(input.substr(input.find(",")+1,input.find(")")-input.find(",")-1).c_str());
-        a.eye(parameter1,parameter2);
-
- }
- else if ( input.find("ones")!=-1){
-          for(int h=0; h<input.length();h++)
-     {
-         if(input[h]==' ')
-            input.erase(h,1);
-     }
-
-         parameter1=atoi(input.substr(input.find("(")+1,input.find(",")-input.find("(")-1).c_str());
-        parameter2=atoi(input.substr(input.find(",")+1,input.find(")")-input.find(",")-1).c_str());
-        a.ones(parameter1,parameter2);
-
- }
- else if ( input.find("zeros")!=-1){
-          for(int h=0; h<input.length();h++)
-     {
-         if(input[h]==' ')
-            input.erase(h,1);
-     }
-
-         parameter1=atoi(input.substr(input.find("(")+1,input.find(",")-input.find("(")-1).c_str());
-        parameter2=atoi(input.substr(input.find(",")+1,input.find(")")-input.find(",")-1).c_str());
-        a.zeros(parameter1,parameter2);
-
- }
- else if ( input.length () ==1 )
- {
-     for ( int i =0 ; i <matrixName.size(); i++ )
-{
-    if ( matrixName[i]==input[0])
-    {
-        a=matrices[i];
-    }
-}
-
- }
- else
- {
-
-     a = evaluateM(input);
-     ola = 1 ;
- }
-//cout<<endl<<input<<endl;
-if ( ola==0 ){
-for ( int i =0 ; i <matrixName.size(); i++ )
-{
-    if ( matrixName[i]==input[0])
-    {
-
-        matrices[i]=a;
-         newmatrix=0 ;
-
-    }
-}
-if(newmatrix){
-matrixName.push_back(input[0]);
-matrices.push_back(a);
-}
-}
-//cout<<counter<<endl;
-if(input[input.length()-1]!=';')
-{
-    if ( flag1 ==0 ){
-    cout<<input[0]<<" = ";
-
-    a.print() ;
-
-    }
-
-}
 
 
-counter ++ ;
-}
+
 void parseandprint( string input)
 {
     static int counter =0 ;
@@ -1576,6 +1651,5 @@ void matrix::random(int r, int c)
 		this->mat[i][j]=((double) rand() / (RAND_MAX ));
 	}
 }
-
 
 
