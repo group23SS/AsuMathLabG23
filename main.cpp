@@ -8,32 +8,29 @@
 using namespace std;
 int main(int argc, char * argv[])
 {
+    ifstream infile ;
+    istream * in = &cin;
     /*my variable input */
     string input ;
-    /*input from file */
-
-    ifstream infile ;
-
-    //cout<<evaluateD("15/(2.1+10*sin(0.12))")<<endl;
-    //parseandprint("A = 5.5 + 12 * sin(0.4) + 2.2^4;");
-    //parseandprint("B = [1.2 2.3 A;[1.3 2.4;4.6 1.3],[3.2;7.8]];");
-    //parseandprint("C = [[B [3.4; 2.1; 3.5+9.1]] 1.2^3 3+1.2 15/(2.1+10*sin(0.12))  1.2]");
-    //parseandprint("D = rand(4,4)");
-    //parseandprint("E = eye(4, 4)");
-    //parseandprint("F = zeros(2, 3)");
-    //parseandprint("G = ones(3, 6)");
-    //parseandprint("L = (1.2 + 3.4 - 5.6)/(2.1*3.2 + 4.6) - 12.1*3.1 + (1.2 + 5.2)^(4/(3.2+5.6))");
-    //parseandprint("X = ((C*D .+ 4)./2.1 + sqrt(D))./C.^2");
-    //parseandprint("Y = C^3 * sin(1./D)");
-
     string s ;
+    int counter =0 ;
 
 
-    infile.open("advexample.txt");
-   int counter =0 ;
-   bool still = 0 ;
-   while ( getline ( infile, s) )
+
+    if (argc>1){
+
+    infile.open(argv[1]);
+    in = &infile ;
+    }
+
+   while ( getline ( *in , s) )
     {
+	if (s=="quit")
+		return 0;
+	if ( s[0]==13 || s[0]==0 )
+		continue;
+	
+	
 
 
         if ( s.find("["))
@@ -49,10 +46,22 @@ int main(int argc, char * argv[])
 
 
        if (counter ==0  ){
-            cout<<input<<endl;
-       //parseandprint(input);
+
+            
+
+            while ( input.find("\n") != -1 )
+            {
+            input.erase(input.find("\n"),1);
+            }
+            while ( input.find("\r") != -1 )
+            {
+            input.erase(input.find("\r"),1);
+            }
+          
+       parseandprint(input);
             input="";
        }
+    }
 
 
 }
@@ -245,7 +254,23 @@ int main(int argc, char * argv[])
     for (int i=0;i<matrices.size();i++)
         matrices[i].destroy();
     system("pause");*/
-    return 0;
-}
+   // return 0;
+//}
 
+ // parseandprint("A = 5.5 + 12 * sin(0.4) + 2.2^4;");
+    //parseandprint("B = [1.2 2.3 A;[1.3 2.4;4.6 1.3],[3.2;7.8]];");
+    //parseandprint("A");
+    //parseandprint("B");
+    //parseandprint("C = [[B [3.4; 2.1; 3.5+9.1]]        1.2^3 3+1.2 15/(2.1+10*sin(0.12)) 1.2]");
+    //parseandprint("D = [1 2 3 4; 5 6 7 8; 9 10 11 12; 13 14 15 16]");
+    //parseandprint("D = rand(4,4)");
+   // system("pause");
+    //parseandprint("E = eye(4, 4)");
+    //parseandprint("F = zeros(2, 3)");
+    //parseandprint("G = ones(3, 6)");
+    //parseandprint("L = (1.2 + 3.4 - 5.6)/(2.1*3.2 + 4.6) - 12.1*3.1 + (1.2 + 5.2)^(4/(3.2+5.6))");
+    //parseandprint("X = ((C*D .+ 4)./2.1 + sqrt(D))./C.^2");
+    //parseandprint("Y = C^3 * sin(1./D)");
+   // parseandprint("B = [1.3 2.4;4.6 1.3]");
+   // parseandprint("B = [[1.2 2.3; A 2.3; B], [3.2;-7.8;-3.2; 1.2]]");
 
