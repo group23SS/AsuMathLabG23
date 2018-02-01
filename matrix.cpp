@@ -5,9 +5,143 @@ int flag1 =0 ;
 int flag2 ;
 vector<char> matrixName;
 vector<matrix> matrices;
+
+
+
+matrix matrix::division(matrix b)
+{
+     matrix c ;
+     c.create_matrix(this->nrow, b.ncolumn);
+	//flag1 =0 ;
+	matrix X ;
+	X.copymatrix(*this);
+	//cout<<getDeterminant()<<endl;
+    if ((this->getcolumn()!=b.getrow())||(X.getDeterminant()==0)){
+                cout<<"Invalid operation "<< endl;
+				flag1 =1 ;
+				return c ;
+	}else
+        {
+  
+        c.copymatrix(this->multiplication(b.inverse())) ;
+
+        return c ;
+         }
+
+}
+
+matrix matrix::matrixOfCofactors()
+{
+    matrix h;
+        int m=1;
+        h.create_matrix(this->nrow,this->ncolumn);
+        for(int i=0;i<nrow;i++){
+            for(int j=0;j<ncolumn;j++){
+                h.mat[i][j]=m*(this->cofactorDeterminant(i,j));
+                m*=-1;
+            }
+             m*=-1;
+        }
+        return h;
+}
+
+
+
+
+matrix matrix::transpose()
+{
+	//flag1 =0 ;
+    matrix c ;
+        int k = 0 ;
+        int l = 0 ;
+        if (this->ncolumn != this->nrow)
+		{flag1 = 1 ;
+            cout<<"Invalid matrix dimension  "<<endl;
+			flag2 = 1;
+
+		}else {
+        c.create_matrix(this->ncolumn , this->nrow);
+        for ( int i = 0 ; i <nrow ; i ++ ) {
+            if ( k == ncolumn) k=0 ;
+            if ( l == nrow) l =0 ;
+            for ( int j =0 ; j <ncolumn ; j ++ ) {
+                //cout<<this->mat[i][j]<<endl<<k<<"    "<<l<<endl;
+
+                c.fill ( k , l , mat [i][j] );
+                k++ ;
+
+            }
+
+            l++;
+        }
+        }
+        //c.print();
+    return c;
+
+}
+
+
+void matrix::copymatrix(matrix a)
+{
+    this->nrow=a.nrow;
+    this->ncolumn=a.ncolumn;
+
+    mat= new double *[nrow];
+
+    for(int i =0 ; i <nrow ; i ++ )
+    {
+        mat[i] = new double [ncolumn];
+        for ( int j =0 ; j <ncolumn ; j ++ )
+            {
+            mat[i][j] = a.mat[i][j];
+            }
+    }
+}
+
+
+matrix matrix::inverse()
+{
+	//flag1 =0 ;
+    matrix c ;
+    //print();
+    matrix B ;
+    B.copymatrix(*this);
+
+
+        double det = this->getDeterminant();
+        //B.print();
+       // cout<<det<<endl;
+        if(det==0)
+		{
+            cout<<"Invalid to get the inverse of the second matrix "<< endl;
+			flag2 = 1;
+			flag1 =1 ;
+			return c ;
+		} else
+        {
+
+
+        c.create_matrix(this->nrow, this->ncolumn);
+       // B.transpose().print();
+        c.copymatrix(B.matrixOfCofactors()) ;
+
+
+        c.copymatrix(c.transpose()) ;
+        c.copymatrix(c.multiplicationofconstant(((double)1/det))) ;
+        
+
+        return c ;
+        }
+
+}
+
+
+
+
+
 void matrix::create_matrixandfill(int nrow,int ncolumn,vector <double> myelements, vector<int> row, vector <int> column)
 {
-    flag1=0;
+    //flag1=0;
     this->nrow=nrow;
     this->ncolumn =ncolumn;
         /*
@@ -39,13 +173,18 @@ void matrix::create_matrixandfill(int nrow,int ncolumn,vector <double> myelement
 
 string matrix::getstring()
 {
+    char buffer[100];
+    if ( nrow==1&&ncolumn==1){
+         sprintf(buffer,"%g", mat[0][0]);
+         return buffer;
+    }
     string s="";
     s+="[";
     for(int i=0 ;i<nrow;i++)
     {
         for(int j=0;j<ncolumn;j++)
         {
-            char buffer[50];
+
             sprintf(buffer,"%g", mat[i][j]);
             s+=buffer;
              if(j!=ncolumn-1)
@@ -98,6 +237,14 @@ void matrix:: Build_matrix(string input)
          if(s[h]==',' && s[h+1]==' ')
             s.erase(h+1,1);
      }
+      for(int h=0; h<s.length();h++)
+     {
+         if(s[h]==' ' && s[h+1]==' '){
+            s.erase(h,1);
+            h--;
+         }
+     }
+
      if ( s[s.length()-1]==';')
         s.erase(s.length()-1,1);
 
@@ -140,7 +287,7 @@ void matrix:: Build_matrix(string input)
 
                 row.push_back(fillingrow);
 				column.push_back(fillingcolumn);
-                cout<<element<<endl;
+                //cout<<element<<endl;
                // cout<<fillingrow<<"	  "<<fillingcolumn<<endl;
                myelements.push_back(evaluateD(element));
 
@@ -185,6 +332,12 @@ void matrix:: Build_matrix(string input)
 	}
 	else if ( s[counter]==' ')
 	{
+	    /*if ( (numeric ==0 ) && s[counter+1]==' '){
+                s.erase(counter ,1);
+                length--;
+            counter++ ;
+            continue;
+	    }*/
 		if(numeric){
                /* if(element[0]>='A' && element[0]<='Z')
                 {
@@ -220,7 +373,7 @@ void matrix:: Build_matrix(string input)
                 row.push_back(fillingrow);
 				column.push_back(fillingcolumn);
 				//cout<<fillingrow<<"	  "<<fillingcolumn<<endl;
-				cout<<element<<endl;
+				//cout<<element<<endl;
 
 
 				myelements.push_back(evaluateD(element));
@@ -279,7 +432,7 @@ void matrix:: Build_matrix(string input)
 				column.push_back(fillingcolumn);
 				//  cout<<atof(element.c_str())<<endl;
 				//  cout<<fillingrow<<"	  "<<fillingcolumn<<endl;
-				cout<<element<<endl;
+				//cout<<element<<endl;
 				myelements.push_back(evaluateD(element));
 
 				//myelements.push_back(atof(element.c_str()));
@@ -379,7 +532,7 @@ void matrix::create_matrix(int rows, int columns)
 
 }
 
-void matrix::fill(double **mat, int ro, int co, double var)
+void matrix::fill( int ro, int co, double var)
 {
     mat[ro][co]=var;
 }
@@ -537,16 +690,18 @@ void matrix::destroy()
 
 matrix matrix::add(matrix b)
 {
-	flag1 =0 ;
+     matrix c;
+            c.create_matrix(b.nrow,b.ncolumn);
+	//flag1 =0 ;
     if(this->nrow != b.nrow || this->ncolumn != b.ncolumn){
             cout<<"Invalid matrix dimension "<<endl;
 			flag1=1;
+			return c ;
         }
 
         else
         {
-            matrix c;
-            c.create_matrix(b.nrow,b.ncolumn);
+
         for(int iR=0;iR<b.nrow;iR++)
             for(int iC=0;iC<b.ncolumn;iC++)
                 c.mat[iR][iC]= (this->mat[iR][iC] + b.mat[iR][iC]);
@@ -561,10 +716,13 @@ matrix matrix::operator+(matrix &b)
 
 matrix matrix::sub(matrix b)
 {
-	flag1=0 ;
+    matrix c;
+            c.create_matrix(b.nrow,b.ncolumn);
+	//flag1=0 ;
     if(this->nrow != b.nrow || this->ncolumn != b.ncolumn){
             cout<<"Invalid matrix dimension "<<endl;
 			flag1 = 1;
+			return c;
         }
         else
         {
@@ -585,33 +743,44 @@ matrix matrix::operator-(matrix &b)
 void matrix::print()
 {
 
-    cout<<'[';
+    //cout<<'[';
+    printf("\n");
         for(int ir=0;ir<nrow;ir++){
             for(int ic=0;ic<ncolumn;ic++){
+            if (ic==0)
+                printf("     ");
+            printf("%g",mat[ir][ic]);
 
-            cout<< this ->mat [ir][ic];
+            //cout<< this ->mat [ir][ic];
             if(ic!=ncolumn-1)
-            cout<<' ';
+                printf("     ");
+
+            //cout<<' ';
             }
 
             if(ir!=nrow-1)
-            cout<<"; ";
+             printf("\n");
+
+            //cout<<"; ";
 
         }
-    cout<<']'<<endl;
+        printf("\n");
+    //cout<<']'<<endl;
 }
 
 matrix matrix::getCofactor(int r, int c)
 {
-	flag1 =0 ;
+	//flag1 =0 ;
+        matrix m;
+        m.create_matrix(nrow-1 ,ncolumn-1 );
     if((nrow<=1 && ncolumn<=1)||(nrow!=ncolumn)){
             cout<<"Invalid matrix dimension "<< endl;
 			flag1 =1 ;
+return m;
 	}
             else
         {
-        matrix m;
-        m.create_matrix(nrow-1 ,ncolumn-1 );
+
         for(int iR=0;iR<m.nrow;iR++)
             for(int iC=0;iC<m.ncolumn;iC++){
                 int sR = (iR<r)?iR:iR+1;
@@ -698,6 +867,7 @@ double LUPDeterminant(double **A, int *P, int N) {
 		matrix copy = *this;
 		 if(LUPDecompose(copy.mat,nrow,0.001,p)){
 			 result= LUPDeterminant(copy.mat,p,nrow);
+
 			 return result;
 		 }
 
@@ -712,49 +882,9 @@ double matrix::cofactorDeterminant(int r, int c)
 
 }
 
-matrix matrix::matrixOfCofactors()
-{
-    matrix h;
-        int m=1;
-        h.create_matrix(this->nrow,this->ncolumn);
-        for(int i=0;i<nrow;i++){
-            for(int j=0;j<ncolumn;j++){
-                h.mat[i][j]=m*(this->cofactorDeterminant(i,j));
-                m*=-1;
-            }
-        }
-        return h;
-}
 
-matrix matrix::transpose()
-{
-	flag1 =0 ;
-    matrix c ;
-        int k = 0 ;
-        int l = 0 ;
-        if (this->ncolumn != this->nrow)
-		{flag1 = 1 ;
-            cout<<"Invalid matrix dimension  "<<endl;
-			flag2 = 1;
 
-		}else {
-        c.create_matrix(this->ncolumn , this->nrow);
-        for ( int i = 0 ; i <nrow ; i ++ ) {
-            if ( k == ncolumn) k=0 ;
-            if ( l == nrow) l =0 ;
-            for ( int j =0 ; j <ncolumn ; j ++ ) {
 
-                c.fill (c.mat , k , l , this -> mat [i][j] );
-                k ++ ;
-
-            }
-
-            l++;
-        }
-        }
-    return c;
-
-}
 
 matrix matrix::multiplicationofconstant(double k)
 {
@@ -769,37 +899,16 @@ matrix matrix::multiplicationofconstant(double k)
         return c ;
 }
 
-matrix matrix::inverse()
-{
-	flag1 =0 ;
-    matrix c ;
-
-        double det = this->getDeterminant();
-        if(det==0)
-		{
-            cout<<"Invalid to get the inverse of the second matrix "<< endl;
-			flag2 = 1;
-			flag1 =1 ;
-		} else
-        {
-
-
-        c.create_matrix(this->nrow, this->ncolumn);
-        c = this->matrixOfCofactors() ;
-
-            c = c.transpose() ;
-            c= c.multiplicationofconstant(((double)1/det)) ;
-        return c ;
-        }
-
-}
 
 matrix matrix::multiplication(matrix b)
-{ flag1 =0 ;
+{ 
+//flag1 =0 ;
     matrix c ;
+    c.create_matrix(this->getrow(), b.getcolumn());
           if (this->getcolumn()!=b.getrow()){
             cout<<" invalid multiplication "<< endl ;
 			flag1=1 ;
+			return c ;
 		  } else
           {
           c.create_matrix(this->getrow(), b.getcolumn());
@@ -819,33 +928,14 @@ matrix matrix::multiplication(matrix b)
 
 }
 
-matrix matrix::division(matrix b)
-{
-	flag1 =0 ;
-	//cout<<getDeterminant()<<endl;
-    if ((this->getcolumn()!=b.getrow())||(getDeterminant()==0)){
-                cout<<"Invalid operation "<< endl;
-				flag1 =1 ;
-	}else
-        {
 
 
-        matrix c ;
-		matrix inverse ;
-        c.create_matrix(this->nrow, b.ncolumn);
-		inverse.create_matrix( b.nrow , b.ncolumn);
-        inverse =b.inverse() ;
-        c =this->multiplication(inverse) ;
 
-        return c ;
-         }
-
-}
 
 matrix matrix::Rdivision()
 {
     matrix c;
-	flag1=0;
+	//flag1=0;
 	int flag=0 ;
     c.create_matrix(this->nrow , this->ncolumn);
 
@@ -890,16 +980,17 @@ matrix matrix::Rdivision()
 
 
 matrix matrix:: ElementByElementMul (matrix b){
-	flag1 =0 ;
+            matrix c;
+            c.create_matrix(b.nrow,b.ncolumn);
     if(this->nrow != b.nrow || this->ncolumn != b.ncolumn){
             cout<<"Invalid matrix dimension "<<endl;
 			flag1=1;
+return c;
         }
 
         else
         {
-            matrix c;
-            c.create_matrix(b.nrow,b.ncolumn);
+
         for(int iR=0;iR<b.nrow;iR++)
             for(int iC=0;iC<b.ncolumn;iC++)
                 c.mat[iR][iC]= (this->mat[iR][iC] * b.mat[iR][iC]);
@@ -931,25 +1022,23 @@ matrix matrix::SubtractionOfConstant (double k) {
         return c ;
 }
 matrix matrix:: ElementByElementDiv (matrix b){
-	flag1 =0 ;
+	            matrix c;
+            c.create_matrix(b.nrow,b.ncolumn);
     if(this->nrow != b.nrow || this->ncolumn != b.ncolumn){
             cout<<"Invalid matrix dimension "<<endl;
 			flag1=1;
-			matrix c;
-            c.create_matrix(b.nrow,b.ncolumn);
-			return c;
+                          return c;
         }
 
         else
         {
-            matrix c;
-            c.create_matrix(b.nrow,b.ncolumn);
+
         for(int iR=0;iR<b.nrow;iR++)
             for(int iC=0;iC<b.ncolumn;iC++){
 				if(b.mat[iR][iC]==0){
 					cout<< "Invalid division"<<endl;
 					flag1=1;
-					return c;
+                                           return c;
 				}
 
 					c.mat[iR][iC]= (this->mat[iR][iC] / b.mat[iR][iC]);}
@@ -988,7 +1077,23 @@ matrix matrix:: powerMatrix (double k){
 
 
 
+matrix matrix:: DivisionByConst(double k){
+matrix c;
+c.create_matrix(this->nrow,this->ncolumn);
 
+if(k!=0){
+for(int i=0;i<nrow;i++){
+for(int j=0;j<ncolumn;j++){
+c.mat[i][j]=this->mat[i][j] / k;
+}
+}
+}
+else {
+cout<< "Invalid Division"<<endl;
+flag1=1;
+}
+return c;
+}
 matrix matrix::sinMatrix ()
 {
     matrix c ;
@@ -996,7 +1101,7 @@ matrix matrix::sinMatrix ()
         for ( int i = 0 ; i <this->nrow ; i ++ )
         {
             for ( int j =0 ; j <this -> ncolumn ; j ++ ) {
-                c.mat[i][j] = sin( (this->mat[i][j])/*3.14159265/180*/);
+                c.mat[i][j] = sin( (this->mat[i][j]));
 
             }
         }
@@ -1009,7 +1114,7 @@ matrix matrix::cosMatrix ()
         for ( int i = 0 ; i <this->nrow ; i ++ )
         {
             for ( int j =0 ; j <this -> ncolumn ; j ++ ) {
-                c.mat[i][j] = cos( (this->mat[i][j])*3.14159265/180);
+                c.mat[i][j] = cos( (this->mat[i][j]));
             }
         }
         return c ;
@@ -1021,7 +1126,7 @@ matrix matrix::tanMatrix ()
         for ( int i = 0 ; i <this->nrow ; i ++ )
         {
             for ( int j =0 ; j <this -> ncolumn ; j ++ ) {
-                c.mat[i][j] = tan( (this->mat[i][j])*3.14159265/180);
+                c.mat[i][j] = tan( (this->mat[i][j]));
             }
         }
         return c ;
@@ -1212,7 +1317,8 @@ void convert(char infix[],char postfix[]) {
 	  else if (symbol=='n' || symbol=='o' || symbol=='s' || symbol=='r' || symbol=='t' || symbol=='l' )
 		  continue;
 	  else if (symbol=='-'){
-		  if ( (j==0)|| (infix[i-1] != ' ' && !isdigit(infix[i-1]) && infix[i-1] != '.' && !(infix[i-1]>=65 && infix[i-1]<=90)) ||  (infix[i-1]==' ' && (!isdigit(infix[i-2])) && infix[i-2] != '.' && !(infix[i-1]>=65 && infix[i-1]<=90)) ){
+		  if ( (j==0)|| (infix[i-1] != ' ' && !isdigit(infix[i-1]) && infix[i-1] != '.' && !(infix[i-1]>=65 && infix[i-1]<=90) && (infix[i-1] != ')'))  ||  (infix[i-1]==' ' && (!isdigit(infix[i-2])) && infix[i-2] != '.' && !(infix[i-2]>=65 &&
+                                                                                                                                                                                                                           infix[i-2]<=90) && (infix[i-2] != ')')) ){
 		  postfix[j]='0';
 		  j++;
 
@@ -1356,8 +1462,7 @@ int currentMatrix;
          operand2 = stack_matrix[top_matrix--];
 		 if (ch != 'c' && ch !='i' && ch !='a' && ch != 'g' && ch !='q')
          operand1 = stack_matrix[top_matrix--];
-		 if ( ch=='/' && IsDouble(operand2) && ConvertToDouble(operand2)==0)
-				 throw("Infinity");
+
 
 
 		 switch(ch) {
@@ -1398,23 +1503,28 @@ int currentMatrix;
             case '/':
 				if (postfix_dot[i]=='.'){
 					if (IsDouble(operand2))
-						stack_matrix[++top_matrix]=( operand1.multiplicationofconstant( 1/( ConvertToDouble(operand2)) ) );
+						stack_matrix[++top_matrix]= operand1.DivisionByConst(ConvertToDouble (operand2) );
 					else if (IsDouble(operand1)){
 						if (ConvertToDouble(operand1)== 1)
 						stack_matrix[++top_matrix]=( operand2.Rdivision() );
 						else
 							stack_matrix[++top_matrix]=( operand2.Rdivision().multiplicationofconstant( ConvertToDouble(operand1) ) );
 					}
-					else
+					else{
+
 						stack_matrix[++top_matrix]=(operand1.ElementByElementDiv(operand2) );
+					}
 
 
 				}
-				else if (IsDouble(operand2))
-					stack_matrix[++top_matrix]=(operand1.ElementByElementDiv(operand2) );
 
-				else
+				else if (IsDouble(operand2))
+					stack_matrix[++top_matrix]= operand1.DivisionByConst( ConvertToDouble(operand2) );
+
+				else{
 					stack_matrix[++top_matrix]= operand1.division(operand2);
+				//cout<<"entered here "<<endl;
+				}
                break;
 			case '^':
 
@@ -1477,6 +1587,11 @@ matrix evaluateM (string infix){
     char buffer [100];
 	strcpy(buffer,infix.c_str());
 
+if (  ( isOperator(infix[infix.length()-1]) && infix[infix.length()-1]!=')') || ( isOperator(infix[infix.length()-2]) && (infix[infix.length()-2]!= ')') && !isdigit(infix[infix.length()-1]) && !(infix[infix.length()-1] >=65 && infix[infix.length()-1] <=90)  )      ) {
+flag1=1;
+cout<<"Invalid operation"<<endl;
+return ConvertToMatrix(0);
+}
 
 	char postfix[100];
 	convert(buffer,postfix);
@@ -1486,7 +1601,17 @@ matrix evaluateM (string infix){
 
 double evaluateD (string infix){
 	char buffer [100];
+	bool flagOp=0;
 	strcpy(buffer,infix.c_str());
+	for (int i=0;i<infix.length();i++){
+        if (infix[i] != '.' && !isdigit(infix[i]) && infix[i] != ' '){
+            flagOp=1;
+            break;
+        }
+
+	}
+if (flagOp==0)
+    return atof(buffer);
 
 	return ConvertToDouble(evaluateM(buffer));
 }
@@ -1495,6 +1620,7 @@ double evaluateD (string infix){
 
 void parseandprint( string input)
 {
+    bool error =0 ;
     static int counter =0 ;
     bool ola =0 ;
  bool newmatrix=1 ;
@@ -1526,6 +1652,7 @@ int parameter1 , parameter2 ;
 
          parameter1=atoi(input.substr(input.find("(")+1,input.find(",")-input.find("(")-1).c_str());
         parameter2=atoi(input.substr(input.find(",")+1,input.find(")")-input.find(",")-1).c_str());
+       // cout<<parameter1<<"n"<<parameter2<<"n"<<endl;
         a.eye(parameter1,parameter2);
 
  }
@@ -1557,10 +1684,19 @@ int parameter1 , parameter2 ;
  {
      for ( int i =0 ; i <matrixName.size(); i++ )
 {
+
+
     if ( matrixName[i]==input[0])
     {
         a=matrices[i];
+	error=0;
+	break;
     }
+	else{
+	
+	 error =1 ;
+		}
+	
 }
 
  }
@@ -1591,11 +1727,16 @@ matrices.push_back(a);
 if(input[input.length()-1]!=';')
 {
     if ( flag1 ==0 ){
+	if ( error ==0){
     cout<<input[0]<<" = ";
-
     a.print() ;
+}
+ else {
+cout<<"Error: matrix not defined"<<endl;
+}
 
     }
+else flag1=0;
 
 }
 
@@ -1625,6 +1766,7 @@ void matrix::ones(int r, int c)
 
 void matrix::eye(int r, int c)
 {
+    create_matrix(r,c);
 	if( r!=c)
 	{
 	cout<<"Invalid Dimension";
@@ -1639,6 +1781,7 @@ void matrix::eye(int r, int c)
 	     {
 	     	this->mat[i][i]=1;
 		 }
+		 //cout<<mat[i][j];
 }
 }
 void matrix::random(int r, int c)
