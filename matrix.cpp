@@ -7,7 +7,11 @@ vector<char> matrixName;
 vector<matrix> matrices;
 
 
-
+/**
+*Calculating the division of a matrix by another matrix.
+*The implementation is done using the multiplication function to multiply the first matrix by the inverse of the second one.
+*return c as the matrix of the result.
+*/
 matrix matrix::division(matrix b)
 {
      matrix c ;
@@ -29,6 +33,10 @@ matrix matrix::division(matrix b)
          }
 
 }
+/**
+*Get the cofactor of each element in the input matrix.
+*return the matrix of cofactors
+*/
 
 matrix matrix::matrixOfCofactors()
 {
@@ -45,8 +53,10 @@ matrix matrix::matrixOfCofactors()
         return h;
 }
 
-
-
+/**
+*Calcualting the transpose of the matrix.
+*return c as the transpose matrix
+*/
 
 matrix matrix::transpose()
 {
@@ -80,6 +90,10 @@ matrix matrix::transpose()
 
 }
 
+/**
+*Used to copy a matrix in another matrix.
+*return void
+*/
 
 void matrix::copymatrix(matrix a)
 {
@@ -97,6 +111,13 @@ void matrix::copymatrix(matrix a)
             }
     }
 }
+
+/**
+*Get the inverse of the matrix.
+*parameter det carries the result of the getDeterminant function.
+*call the function matrixOfCofactors() and transpose() and multiplicationofconstant(((double)1/det)).
+*return c as the inverse of the matrix.
+*/
 
 
 matrix matrix::inverse()
@@ -135,6 +156,14 @@ matrix matrix::inverse()
 
 }
 
+/**
+*Create the new matrix and fill it with the elements after parsing the input string.
+*A dynamic 2D array is basically an array of pointers to arrays.
+*First,allocate memory for an array which contains a set of pointers.
+*Next, we will allocate memory for each array which is pointed by the pointers.
+*The deallocation of memory is done in the reverse order of memory allocation.
+*return void
+*/
 
 
 
@@ -144,13 +173,8 @@ void matrix::create_matrixandfill(int nrow,int ncolumn,vector <double> myelement
     //flag1=0;
     this->nrow=nrow;
     this->ncolumn =ncolumn;
-        /*
-        A dynamic 2D array is basically an array of pointers to arrays.
-        First, we will allocate memory for an array which contains a set of pointers.
-        Next, we will allocate memory for each array which is pointed by the pointers.
-        The deallocation of memory is done in the reverse order of memory allocation.
-        */
-        this->mat = new double* [nrow];
+       
+        this->mat = new double* [nrow];//<the new matrix to be filled
 
         for (int i = 0; i <nrow; i++)
         {
@@ -170,7 +194,10 @@ void matrix::create_matrixandfill(int nrow,int ncolumn,vector <double> myelement
 
 }
 
-
+/**
+*Fix the input string of a matrix before parssing and building the real matrix.
+*return s as the fixed string input.
+*/
 string matrix::getstring()
 {
     char buffer[100];
@@ -199,7 +226,13 @@ string matrix::getstring()
     s+="]";
     return s;
 }
-
+/**
+*This function takes the input string of a matrix.
+*Parse the rows and columns.
+*Calculates the number of rows and columns that will be used to fill the real matrix.
+*Call the function create_matrixandfill and pase the elements for it.
+*return void
+*/
 void matrix:: Build_matrix(string input)
 {
 	int counter=0,insidebracket=0 , sizecolumn=1 ,fillingcolumn=0 ,sizerow=1,fillingrow=0,saverow=0,savecolumn=0,aftercomma=0,semicoloncounter=0;
@@ -208,7 +241,7 @@ void matrix:: Build_matrix(string input)
 
 	vector <int>row;
 	vector <int>column;
-	vector<double>myelements;
+	vector<double>myelements; //< new vector that carries all the elements of the matrix that will be filled using create_matrixandfill function
 	string s=input.substr(input.find('[')+1),element;
      for(int i=0;i<matrices.size();i++)
      {
@@ -245,7 +278,7 @@ void matrix:: Build_matrix(string input)
          }
      }
 
-     if ( s[s.length()-1]==';')
+     if ( s[s.length()-1]==';')  //< if it's ";" so it means a new row in the matrix
         s.erase(s.length()-1,1);
 
      length=s.length();
@@ -330,7 +363,7 @@ void matrix:: Build_matrix(string input)
 		continue;
 
 	}
-	else if ( s[counter]==' ')
+	else if ( s[counter]==' ')  //< if it's "  " then it means a new column in the matrix
 	{
 	    /*if ( (numeric ==0 ) && s[counter+1]==' '){
                 s.erase(counter ,1);
@@ -503,16 +536,26 @@ void matrix:: Build_matrix(string input)
 
 
 }
+
+/**
+*return the number of rows in the matrix.
+*/
 int matrix::getrow()
 {
     return nrow;
 }
-
+/** 
+*return the number of columns in the matrix
+*/
 int matrix::getcolumn()
 {
     return ncolumn;
 }
 
+/**
+*Create a new matrix with the required input of rows and columns
+*return void
+*/
 void matrix::create_matrix(int rows, int columns)
 {
     nrow=rows;
@@ -531,7 +574,10 @@ void matrix::create_matrix(int rows, int columns)
         }
 
 }
-
+/** 
+*fill the matrix with variables.
+*return void.
+*/
 void matrix::fill( int ro, int co, double var)
 {
     mat[ro][co]=var;
@@ -677,7 +723,10 @@ void matrix::print_matrix()
             cout << endl;
         }
 }
-
+/**
+*destruct the matrix from memory.
+*return void.
+*/
 void matrix::destroy()
 {
     for (int i = 0; i < this->nrow; i++)
@@ -687,7 +736,10 @@ void matrix::destroy()
 
         delete[] this->mat; //delete pointer holding array of pointers;
 }
-
+/**
+*add a matrix to another matrix.
+*return c as a result of the addition.
+*/
 matrix matrix::add(matrix b)
 {
      matrix c;
@@ -713,6 +765,10 @@ matrix matrix::operator+(matrix &b)
 {
     return add(b);
 }
+/**
+*Subtract two matrices.
+*return c as the result of subtraction.
+*/
 
 matrix matrix::sub(matrix b)
 {
@@ -739,6 +795,11 @@ matrix matrix::operator-(matrix &b)
 {
     return sub(b);
 }
+
+/**
+*Print the matrix to the terminal.
+*return void.
+*/
 
 void matrix::print()
 {
@@ -884,7 +945,10 @@ double matrix::cofactorDeterminant(int r, int c)
 
 
 
-
+/**
+*Multiplication of a matrix by a constant.
+*return c as the output matrix.
+*/
 
 matrix matrix::multiplicationofconstant(double k)
 {
@@ -898,7 +962,10 @@ matrix matrix::multiplicationofconstant(double k)
         }
         return c ;
 }
-
+/**
+*Multiplies two matrices.
+*return c as the result of multiplication.
+*/
 
 matrix matrix::multiplication(matrix b)
 { 
@@ -977,7 +1044,9 @@ matrix matrix::Rdivision()
 
 
 
-
+/**
+*Implement multiplication for each element in a matrix
+*/
 
 matrix matrix:: ElementByElementMul (matrix b){
             matrix c;
@@ -997,6 +1066,10 @@ return c;
         return c;
         }
 }
+
+/**
+*Add a contstant to each element
+*/
 matrix matrix::AdditionOfConstant(double k)
 {
     matrix c ;
@@ -1009,6 +1082,9 @@ matrix matrix::AdditionOfConstant(double k)
         }
         return c ;
 }
+/**
+*Subtract a constant from each element in a matrix
+*/
 
 matrix matrix::SubtractionOfConstant (double k) {
 	 matrix c ;
@@ -1021,6 +1097,10 @@ matrix matrix::SubtractionOfConstant (double k) {
         }
         return c ;
 }
+/**
+*Divide two matrices element by element
+*/
+
 matrix matrix:: ElementByElementDiv (matrix b){
 	            matrix c;
             c.create_matrix(b.nrow,b.ncolumn);
@@ -1046,6 +1126,9 @@ matrix matrix:: ElementByElementDiv (matrix b){
         }
 }
 
+/**
+*Implement power function for each element in a matrix
+*/
 
 
 matrix matrix::ElementByEelementPower (double k)
@@ -1060,7 +1143,9 @@ matrix matrix::ElementByEelementPower (double k)
         }
         return c ;
 }
-
+/**
+*return a matrix raies to power k
+*/
 
 matrix matrix:: powerMatrix (double k){
 	 matrix c ;
@@ -1076,6 +1161,9 @@ matrix matrix:: powerMatrix (double k){
 }
 
 
+/**
+*Divide each element by a constant
+*/
 
 matrix matrix:: DivisionByConst(double k){
 matrix c;
@@ -1094,6 +1182,9 @@ flag1=1;
 }
 return c;
 }
+/**
+*Get the sine of each element and replace it with the result
+*/
 matrix matrix::sinMatrix ()
 {
     matrix c ;
@@ -1107,6 +1198,9 @@ matrix matrix::sinMatrix ()
         }
         return c ;
 }
+/**
+*Get the cosine of each element and replace it with the result
+*/
 matrix matrix::cosMatrix ()
 {
     matrix c ;
@@ -1119,6 +1213,9 @@ matrix matrix::cosMatrix ()
         }
         return c ;
 }
+/**
+*Get the tan function of each element and replace it with the result
+*/
 matrix matrix::tanMatrix ()
 {
     matrix c ;
@@ -1131,6 +1228,9 @@ matrix matrix::tanMatrix ()
         }
         return c ;
 }
+/**
+*Get the log with base 10 for each element and replace it with the result
+*/
 matrix matrix::logMatrix ()
 {
     matrix c ;
@@ -1145,14 +1245,6 @@ matrix matrix::logMatrix ()
 }
 
 
-/*
-***********************************************************************************************************
-***********************************************************************************************************
-************************************************* POSTFIX *************************************************
-***********************************************************************************************************
-***********************************************************************************************************
-*/
-
 	void pushMat(){
 	matrix c;
 	c.create_matrix(2,2);
@@ -1161,12 +1253,20 @@ matrix matrix::logMatrix ()
 	matrices.push_back(c);
 	}
 
+	/**
+	*To deal with a double number as a matrix, we need to convert it to a 1x1 matrix.
+	* So,This function takes a double number and returns a 1x1 matrix
+	*/
+
 matrix ConvertToMatrix (double x){
 	matrix a;
 	a.create_matrix(1,1);
 	a.mat[0][0]=x;
 	return a;
 }
+/**
+*Takes 1x1 matrix and returns the contained element of type double
+*/
 
 double ConvertToDouble (matrix a){
 	double x=0;
@@ -1175,7 +1275,9 @@ double ConvertToDouble (matrix a){
 	}
 	return x;
 }
-
+/**
+*Checks whether it is 1x1 matrix, If yes it could be converted to a double number 
+*/
 int IsDouble (matrix a){
 	if (a.getrow()==1 && a.getcolumn()==1)
 		return 1;
@@ -1191,6 +1293,16 @@ char stack_dot[70];
 int top = -1;
 int top_dot=-1;
 
+/**
+*Postfix is much easier to translate the complex mathematical expressions to a format that 
+*is suitable for direct execution and can be direclty translated to code.
+*/
+
+
+/**
+*Stack array keeps the operators in considering their precedence level.
+*/
+
 void push(char item) {
    stack[++top] = item;
 }
@@ -1198,7 +1310,10 @@ void push(char item) {
 char pop() {
    return stack[top--];
 }
-
+/**
+*stack_dot array determines the operators that comes after '.' operator
+*as it is implemented for each element in the matrix.
+*/
 void push_dot(char item) {
    stack_dot[++top_dot] = item;
 }
@@ -1208,7 +1323,10 @@ char pop_dot() {
 }
 
 
-//returns precedence of operators
+/**
+*Returns precedence of operators, as operators of higher precedence are used before operators of lower precedence. 
+*The only thing that can change that order is the presence of parentheses.
+*/
 int precedence(char symbol) {
 
    switch(symbol) {
@@ -1238,7 +1356,7 @@ int precedence(char symbol) {
    }
 }
 
-//check whether the symbol is operator?
+/**check whether the symbol is operator*/
 int isOperator(char symbol) {
 
    switch(symbol) {
@@ -1250,11 +1368,11 @@ int isOperator(char symbol) {
       case '(':
       case ')':
 	  case '.':
-	  case 'i':
-	  case 'a':
-	  case 'c':
-	  case 'q':
-	  case 'g':
+	  case 'i': //<indicates to sin
+	  case 'a': //<indicates to tan
+	  case 'c': //<indicates to cos
+	  case 'q': //<indicates to sqrt
+	  case 'g': //<indicates to log
 
          return 1;
       break;
@@ -1271,9 +1389,13 @@ char postfix_dot[100];
 int matrixIndex;
 bool existed=0;
 bool isMatrix=0;
-//converts infix expression to postfix
 
-
+/**
+*converts infix expression to postfix, To do this we need to:
+*Find all the operators in the given Infix Expression.
+*Find the order of operators evaluated according to their precedence.
+*Convert each operator into postfix expression in the same order.
+*/
 void convert(char infix[],char postfix[]) {
 
 	for (int a=0;a<100;a++)
@@ -1286,8 +1408,10 @@ void convert(char infix[],char postfix[]) {
 
    for(i = 0;i<strlen(infix);i++) {
       symbol = infix[i];
-
-	 if ( (i==0) && (symbol>=65 && symbol<=90) ){
+	  
+	  /**Checks whether the matrix is given before. if yes, replaces it with the evaluated one. if no, pushes it in the matrices vector*/
+	 
+	  if ( (i==0) && (symbol>=65 && symbol<=90) ){   
 		  isMatrix=1;
 		  for (int a=0;a<matrixName.size();a++){
 			  if (matrixName[a] == infix[0]){
@@ -1306,11 +1430,12 @@ void convert(char infix[],char postfix[]) {
 	  }
 
 
-
+	 
 	 if ((isOperator(symbol)==0) && ( !isdigit(symbol)) && !(symbol>=65 && symbol<=90) )
 		  continue;
 
-	  if (symbol=='.' && isOperator(infix[i+1]))
+	 
+	  if (symbol=='.' && isOperator(infix[i+1])) //<If '.' followed by operator, just continue without pushing it in the stack
 		  continue;
 
 
@@ -1328,7 +1453,7 @@ void convert(char infix[],char postfix[]) {
       if(isOperator(symbol) == 0) {
          postfix[j] = symbol;
 
-		 flag10[j]=symbol;
+		 flag10[j]=symbol; ///< flag10 determines numbers with more than one digit 
 
 
 
@@ -1336,7 +1461,9 @@ void convert(char infix[],char postfix[]) {
 
 		 j++;
 
-      } else {
+      } 
+	  /** if the current char is an operator,it needs to be ordered according to its precedence.*/
+	  else {
 		  if (flagint==1)
 			  flag10[j-1]=0;
 
@@ -1402,7 +1529,7 @@ void convert(char infix[],char postfix[]) {
       j++;
    }
 
-   postfix[j]='\0';//null terminate string.
+   postfix[j]='\0'; //<null terminate string.
    postfix_dot[j]='\0';
 top = -1;
 top_dot=-1;
@@ -1413,7 +1540,13 @@ flagint=0;
 }
 
 
-//evaluates postfix expression
+/**
+*To evaluate postfix expression:
+*While reading the expression from left to right, push the element in the stack if it is an operand.
+*Pop the two operands from the stack, if the element is an operator and then evaluate it.
+*Push back the result of the evaluation. 
+*Repeat it till the end of the expression.
+*/
 matrix evaluatePost(char *postfix){
 
 int top_matrix = -1;
@@ -1429,7 +1562,7 @@ int currentMatrix;
 	   while( (ch = postfix[i]) != '\0') {
 
 
-		   if (flag10[i] !=0 && flag10[i+1] !=0 ){
+		   if (flag10[i] !=0 && flag10[i+1] !=0 ){ //<If the number contains of 2 digits, evaluate them and push into the stack
 
 			   double x=(double)(((flag10[i]-'0')*10)+flag10[i+1]-'0');
 			   stack_matrix[++top_matrix] =  ConvertToMatrix(x);
@@ -1458,13 +1591,16 @@ int currentMatrix;
 
 
 	  else {
-         //Operator,pop two  operands
+         
+		  /**Pop the two operands from the stack, if the element is an operator.*/
          operand2 = stack_matrix[top_matrix--];
 		 if (ch != 'c' && ch !='i' && ch !='a' && ch != 'g' && ch !='q')
          operand1 = stack_matrix[top_matrix--];
 
 
+		 
 
+ /**evaluate it and push the result of the evaluation back.*/
 		 switch(ch) {
 
             case '+':
@@ -1488,7 +1624,7 @@ int currentMatrix;
 				}
                break;
             case '*':
-				if (postfix_dot[i]=='.'){
+				if (postfix_dot[i]=='.'){ //< Check if it came after '.' operator
 					if (IsDouble(operand2))
 						stack_matrix[++top_matrix]=( operand1.multiplicationofconstant( ConvertToDouble(operand2) ) );
 					else if (IsDouble(operand1))
@@ -1501,7 +1637,7 @@ int currentMatrix;
 					stack_matrix[++top_matrix]=(operand1.multiplication(operand2));
                break;
             case '/':
-				if (postfix_dot[i]=='.'){
+				if (postfix_dot[i]=='.'){ //< Check if it came after '.' operator
 					if (IsDouble(operand2))
 						stack_matrix[++top_matrix]= operand1.DivisionByConst(ConvertToDouble (operand2) );
 					else if (IsDouble(operand1)){
@@ -1523,7 +1659,6 @@ int currentMatrix;
 
 				else{
 					stack_matrix[++top_matrix]= operand1.division(operand2);
-				//cout<<"entered here "<<endl;
 				}
                break;
 			case '^':
@@ -1545,20 +1680,20 @@ int currentMatrix;
 				else
 					stack_matrix[++top_matrix]=ConvertToMatrix ( (ConvertToDouble(operand1) + (ConvertToDouble(operand2)/100)) );
 				break;
-			case 'i':
+			case 'i': //< case it is sin
 		            stack_matrix[++top_matrix]=operand2.sinMatrix();
 
 				break;
-			case 'a':
+			case 'a': //< case it is tan
 					stack_matrix[++top_matrix]=operand2.tanMatrix();
 				break;
-			case'c':
+			case'c': //< case it is cos
 				stack_matrix[++top_matrix]=operand2.cosMatrix();
 				break;
-			case 'q':
+			case 'q': //< case it is sqrt
 				stack_matrix[++top_matrix]=operand2.powerMatrix(0.5);
 				break;
-			case 'g':
+			case 'g': //< case it is log
 				stack_matrix[++top_matrix]=operand2.logMatrix();
 				break;
 
@@ -1568,7 +1703,8 @@ int currentMatrix;
 	  i++;
 
    }
-   if (isMatrix==1){
+   /**If the matrix had been previously added to the vector just replace it with the evaluated one. if not push the result into the vector of matrices*/
+   if (isMatrix==1){ 
    if (existed==0)
 	   matrices.push_back(stack_matrix[top_matrix]);
    else
@@ -1581,7 +1717,10 @@ int currentMatrix;
 
 }
 
-
+/**
+*It takes the infix expression and returns the evaluated matrix 
+*If the expression doesn't contain matrices, it returns the value in the form of 1x1 matrix
+*/
 
 matrix evaluateM (string infix){
     char buffer [100];
@@ -1598,7 +1737,7 @@ return ConvertToMatrix(0);
 
 	return evaluatePost(postfix);
 }
-
+/**If the expression doesn't contain matrices, it direclty returns the evaluated value */ 
 double evaluateD (string infix){
 	char buffer [100];
 	bool flagOp=0;
@@ -1616,7 +1755,12 @@ if (flagOp==0)
 	return ConvertToDouble(evaluateM(buffer));
 }
 
-
+/**
+*Takes the input from user and determine if it's a pure operation and call the function to evaluate it.
+*Determine if it contains a matrix that needs to be built.
+*Determine if it's a rand or eye or zero or ones function and call them.
+*retuen void
+*/
 
 void parseandprint( string input)
 {
@@ -1743,6 +1887,10 @@ else flag1=0;
 
 counter ++ ;
 }
+/** 
+* Create a matrix full of zeros.
+* return void.
+*/
 void matrix::zeros(int r, int c)
 {
 	create_matrix( r, c);
@@ -1753,6 +1901,10 @@ void matrix::zeros(int r, int c)
 		this->mat[i][j]=0;
 	}
 }
+/** 
+* Create a matrix full of ones.
+* return void.
+*/
 void matrix::ones(int r, int c)
 {
 	create_matrix( r, c);
@@ -1763,7 +1915,10 @@ void matrix::ones(int r, int c)
 		this->mat[i][j]=1;
 	}
 }
-
+/** 
+* Create a matrix with a diagonal of ones and the rest with zeros.
+* return void.
+*/
 void matrix::eye(int r, int c)
 {
     create_matrix(r,c);
@@ -1784,6 +1939,10 @@ void matrix::eye(int r, int c)
 		 //cout<<mat[i][j];
 }
 }
+/** 
+* Create a matrix full of random numbers.
+* return void.
+*/
 void matrix::random(int r, int c)
 {
 	create_matrix( r, c);
