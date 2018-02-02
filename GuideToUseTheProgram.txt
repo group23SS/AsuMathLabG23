@@ -1,0 +1,9 @@
+To compile:
+
+	run the make file using "make" command on the terminal. 
+
+To run the program you have two ways:
+
+  From terminal--> write  ./matrix 
+
+  using the example file write  ./matrix "the path of the file here"
