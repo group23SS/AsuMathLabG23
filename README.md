@@ -16,6 +16,8 @@ The program supports many operations:
 	5-"Zeros" to create a matrix filled with zeros
 	6-"Ones" to create a matrix filled with ones
   
+The program can run using Ubuntu linux.
+
 The program get the input as a string.
 
 
