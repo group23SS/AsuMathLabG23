@@ -7,7 +7,6 @@ The program supports many operations:
 	1-Mathematical Functions 
 	
       1.1 Trigonometric "sin-cos-tan"
-      
       1.2 Logarithmic
       1.3 Roots
       1.4 Power
@@ -40,8 +39,11 @@ To convert infix expression into postfix expression we can use the following pro
 
 
 To evaluate postfix expression:
+
 1-While reading the expression from left to right, push the element in the stack if it is an operand.
+
 2-Pop the two operands from the stack, if the element is an operator and then evaluate it.
+
 3-Push back the result of the evaluation and repeat it till the end of the expression.
 
 2] Any string matrix input you can enter it as a letter name or as a matrix expression written between square brackets, so we implemented a function to parse the input into certain number of rows and columns and another function to create a matrix with this number of rows and columns and fill it with the elements.
