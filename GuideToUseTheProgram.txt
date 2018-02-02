@@ -4,6 +4,6 @@ To compile:
 
 To run the program you have two ways:
 
-  From terminal--> write  ./matrix 
+  1-From terminal--> write  ./matrix 
 
-  using the example file write  ./matrix "the path of the file here"
+  2-Using the example file write  ./matrix "the path of the file here"
