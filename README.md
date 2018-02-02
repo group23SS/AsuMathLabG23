@@ -32,9 +32,13 @@ As Postfix is much easier to translate the complex mathematical expressions to a
 To convert infix expression into postfix expression we can use the following procedure:
 
 -Read all the symbols one by one from left to right in the given Infix Expression.
+
 -If the reading symbol is operand, then directly print it to output (postfix format).
+
 -If the reading symbol is left parenthesis '(', then Push it on to the Stack.
+
 -If the reading symbol is right parenthesis ')', then Pop all the contents of stack until respective left parenthesis is poped and print each poped symbol to the output (postfix).
+
 -If the reading symbol is operator (+ , - , * , / etc..,), then Push it on to the Stack. However, first pop the operators which are already on the stack that have higher or equal precedence than current operator and print them to the result.
 
 
