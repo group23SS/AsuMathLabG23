@@ -3,8 +3,11 @@
 AsuMathLab is a repository for showing the implementation of a mathematical library software that is similar to Matlab and Octave.
 
 The program supports many operations:
+
 	1-Mathematical Functions 
+	
       1.1 Trigonometric "sin-cos-tan"
+      
       1.2 Logarithmic
       1.3 Roots
       1.4 Power
